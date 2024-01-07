@@ -14,7 +14,7 @@ const render = require("./src/page-template.js");
 let teamMembers = [];
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
-//name id email officeNumber
+//function to initialize the app, prompt to enter the team manager’s info
 function addManager() {
     inquirer
         .prompt([
@@ -47,11 +47,12 @@ function addManager() {
             data.manOfficeNumber
             );
             teamMembers.push(manager);
+            // calls function to choose what to do next (add member or finish)
             addMember();
         }
   )
 }
-
+// present a menu with the option to: Add an engineer, Add an intern, Finish building the team
 function addMember() {
     inquirer
     .prompt([
@@ -59,7 +60,7 @@ function addMember() {
             type: "list",
             name: "member",
             message: "What do you want to do next?",
-            choices: ["Add an engineer", "Add an intern", "Finished"],
+            choices: ["Add an engineer", "Add an intern", "Finish"],
             },
     ])
     .then((data) => {
@@ -76,7 +77,7 @@ function addMember() {
     });
     
 }
-
+// function to add an engineer to the team, promts to gather info
 function addEngineer() {
     inquirer
         .prompt([
@@ -109,11 +110,12 @@ function addEngineer() {
             data.engGithub
             );
             teamMembers.push(engineer);
+            // calls function to choose what to do next (add member or finish)
             addMember();
         }
   )
 }   
-
+// function to add an intern to the team, promts to gather info
 function addIntern() {
     inquirer
         .prompt([
@@ -146,18 +148,26 @@ function addIntern() {
             data.intSchool
             );
             teamMembers.push(intern);
+            // calls function to choose what to do next (add member or finish)
             addMember();
         }
   )
 }
-
+// call finishedTeam to create a HTML file and finish creating the team info
 function finishedTeam() {
-    fs.writeFileSync(outputPath, render(teamMembers), (error) => {
-        if (error) {
-            console.log("Error writing team HTML file:", error);
+    // Create the output directory if it doesn't exist
+    if (!fs.existsSync(OUTPUT_DIR)) {
+        fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+    }
+
+    fs.writeFile(outputPath, render(teamMembers), (err) => {
+        if (err) {
+            console.error("Error writing team HTML file:", err);
         } else {
             console.log("Team HTML file generated successfully!");
         }
     });
 }
+
+// call addManager function to initilize the app
 addManager();
