@@ -11,6 +11,7 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./src/page-template.js");
 
+let teamMembers = [];
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
 //name id email officeNumber
@@ -45,6 +46,7 @@ function addManager() {
             data.manEmail,
             data.manOfficeNumber
             );
+            teamMembers.push(manager);
             addMember();
         }
   )
@@ -62,10 +64,10 @@ function addMember() {
     ])
     .then((data) => {
         switch (data.member) {
-            case "Engineer":
+            case "Add an engineer":
             addEngineer();               
             break;                     
-          case "Intern":   
+          case "Add an intern":   
             addIntern();
             break;
           default:
@@ -106,6 +108,7 @@ function addEngineer() {
             data.engEmail,
             data.engGithub
             );
+            teamMembers.push(engineer);
             addMember();
         }
   )
@@ -132,7 +135,7 @@ function addIntern() {
             {
                 type: "input",
                 name: "intSchool",
-                message: "Enter the intern's",
+                message: "Enter the intern's school",
             },
         ])
         .then((data) => {
@@ -142,12 +145,19 @@ function addIntern() {
             data.intEmail,
             data.intSchool
             );
+            teamMembers.push(intern);
             addMember();
         }
   )
 }
 
 function finishedTeam() {
-    
+    fs.writeFileSync(outputPath, render(teamMembers), (error) => {
+        if (error) {
+            console.log("Error writing team HTML file:", error);
+        } else {
+            console.log("Team HTML file generated successfully!");
+        }
+    });
 }
 addManager();
