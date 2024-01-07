@@ -50,4 +50,104 @@ function addManager() {
   )
 }
 
+function addMember() {
+    inquirer
+    .prompt([
+        {
+            type: "list",
+            name: "member",
+            message: "What do you want to do next?",
+            choices: ["Add an engineer", "Add an intern", "Finished"],
+            },
+    ])
+    .then((data) => {
+        switch (data.member) {
+            case "Engineer":
+            addEngineer();               
+            break;                     
+          case "Intern":   
+            addIntern();
+            break;
+          default:
+            finishedTeam();
+        }
+    });
+    
+}
+
+function addEngineer() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "engName",
+                message: "Enter the engineer's name",
+            },
+            {
+                type: "input",
+                name: "engId",
+                message: "Enter the engineer's id",
+            },
+            {
+                type: "input",
+                name: "engEmail",
+                message: "Enter the engineer's email",
+            },
+            {
+                type: "input",
+                name: "engGithub",
+                message: "Enter the engineer's Github",
+            },
+        ])
+        .then((data) => {
+            const engineer = new Engineer (
+            data.engName,
+            data.engId,
+            data.engEmail,
+            data.engGithub
+            );
+            addMember();
+        }
+  )
+}   
+
+function addIntern() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "intName",
+                message: "Enter the team intern's name",
+            },
+            {
+                type: "input",
+                name: "intId",
+                message: "Enter the team intern's id",
+            },
+            {
+                type: "input",
+                name: "intEmail",
+                message: "Enter the team intern's email",
+            },
+            {
+                type: "input",
+                name: "intSchool",
+                message: "Enter the intern's",
+            },
+        ])
+        .then((data) => {
+            const intern = new Intern (
+            data.intName,
+            data.intId,
+            data.intEmail,
+            data.intSchool
+            );
+            addMember();
+        }
+  )
+}
+
+function finishedTeam() {
+    
+}
 addManager();
